@@ -4,6 +4,7 @@ DinoHunterUE/
 index.backup.html
 ai_studio_code*.html
 trex.glb
+*_glb.js
 .DS_Store
 *.log
 .vercel/

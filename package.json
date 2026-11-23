@@ -1,18 +1,26 @@
 {
-  "name": "home-simulator-3d",
+  "name": "sur-dino-hunter-3d",
   "version": "1.0.0",
-  "description": "Home Simulator 3D Game",
+  "description": "Deer & Dino Hunter 2026: GTA VI Ultra Edition (3D WebGL & Electron Game)",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win --x64"
   },
   "build": {
-    "appId": "com.homesimulator.game",
-    "productName": "HomeSimulator3D",
+    "appId": "com.sur.dinohunter3d",
+    "productName": "DinoHunter3D",
+    "files": [
+      "main.js",
+      "public/**/*",
+      "package.json"
+    ],
     "win": {
       "target": "portable"
     }
+  },
+  "dependencies": {
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "electron": "^29.0.0",

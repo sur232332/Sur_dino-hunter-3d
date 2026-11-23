@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>DEER & DINO HUNTER 2026: GTA VI ULTRA EDITION</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --glass: rgba(10, 14, 22, 0.88);
+    --border: rgba(255, 255, 255, 0.16);
+    --neon: #ec4899;
+    --gold: #facc15;
+    --cyan: #22d3ee;
+    --green: #4ade80;
+    --red: #ef4444;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Noto Sans Armenian', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+body, html {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    background: #04070d;
+    color: #f8fafc;
+    touch-action: none;
+    overscroll-behavior: none;
+}
+#game-mount { position: absolute; inset: 0; z-index: 1; touch-action: none; }
+#hud-canvas { position: absolute; inset: 0; z-index: 15; pointer-events: none; }
+
+/* Cinematic Letterbox for Bullet-Cam */
+.cine-bar { position: absolute; left: 0; width: 100%; height: 0; background: #000; z-index: 28; transition: height 0.25s ease; pointer-events: none; }
+#cb-top { top: 0; } #cb-bot { bottom: 0; }
+body.bullet-cam #cb-top, body.bullet-cam #cb-bot { height: 68px; }
+
+/* Top-Right GTA VI HUD */
+.gta-top-right {
+    position: absolute; top: 16px; right: 20px; text-align: right; z-index: 22; pointer-events: none;
+    text-shadow: 2px 2px 4px #000;
+}
+.wanted-row { font-size: 26px; letter-spacing: 3px; color: var(--gold); margin-bottom: 2px; }
+.wanted-row .off { color: rgba(255, 255, 255, 0.18); }
+.wanted-row.flashing .on { animation: policeFlash 0.45s infinite alternate; }
+@keyframes policeFlash { from { color: #ef4444; text-shadow: 0 0 12px #ef4444; } to { color: #3b82f6; text-shadow: 0 0 12px #3b82f6; } }
+.cash-txt { font-size: 30px; font-weight: 900; color: var(--green); font-family: 'Courier New', monospace; }
+.weap-badge {
+    margin-top: 4px; background: var(--glass); border-right: 4px solid var(--neon);
+    padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: 800; display: inline-block;
+}
+.res-pill {
+    margin-top: 5px; background: rgba(0,0,0,0.72); padding: 4px 10px; border-radius: 6px;
+    font-size: 11px; font-weight: 700; color: #cbd5e1; border: 1px solid var(--border);
+}
+
+/* Top-Center Mission & Weather Bar */
+.top-center {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 24;
+}
+.mission-box {
+    background: var(--glass); border-bottom: 2px solid var(--neon); padding: 6px 20px;
+    border-radius: 8px; font-size: 13px; font-weight: 800; backdrop-filter: blur(8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.65); white-space: nowrap;
+}
+.toolbar { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.t-btn {
+    background: rgba(15, 23, 42, 0.9); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.22);
+    padding: 5px 11px; border-radius: 7px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.15s;
+}
+.t-btn:hover { background: var(--neon); color: #fff; border-color: #fff; }
+.t-btn.active { background: var(--green); color: #000; border-color: #fff; }
+
+/* Bottom-Left Rotating GTA Radar & Survival Bars */
+.radar-panel {
+    position: absolute; bottom: 18px; left: 18px; width: 195px; z-index: 22;
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+}
+.radar-ring {
+    width: 170px; height: 170px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.35);
+    background: rgba(6, 11, 18, 0.92); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+}
+.surv-bars { width: 100%; background: var(--glass); padding: 7px 10px; border-radius: 8px; border: 1px solid var(--border); }
+.s-row { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 800; margin: 3px 0; }
+.s-track { flex: 1; height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; }
+.s-fill { height: 100%; transition: width 0.2s; }
+
+/* Bottom-Right Build & Controls Panel */
+.controls-card {
+    position: absolute; bottom: 18px; right: 18px; background: var(--glass);
+    border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px;
+    font-size: 11px; line-height: 1.6; z-index: 22; backdrop-filter: blur(8px);
+}
+.controls-card b { color: var(--cyan); background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 4px; }
+.build-row { display: flex; gap: 5px; margin-bottom: 6px; flex-wrap: wrap; }
+
+/* Animated GTA Weapon Wheel [Tab] */
+#weapon-wheel {
+    position: absolute; inset: 0; background: radial-gradient(circle, rgba(15,23,42,0.45), rgba(0,0,0,0.88));
+    z-index: 45; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px);
+}
+.wheel-circle {
+    width: 410px; height: 410px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.28);
+    position: relative; background: rgba(12, 18, 30, 0.94); display: flex; align-items: center; justify-content: center;
+}
+.w-slot {
+    position: absolute; width: 92px; height: 92px; border-radius: 50%; background: #1e293b;
+    border: 2px solid #475569; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; cursor: pointer; font-size: 11px; font-weight: 800; transition: 0.15s; text-align: center;
+}
+.w-slot:hover, .w-slot.active { background: var(--neon); color: #fff; border-color: #fff; transform: scale(1.12); box-shadow: 0 0 20px var(--neon); }
+
+/* Upgrade Shop Modal [U] */
+#shop-modal {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.78); z-index: 48;
+    display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px);
+}
+.shop-box {
+    width: 460px; background: #0f172a; border: 2px solid var(--neon); border-radius: 14px;
+    padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+}
+.shop-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px; margin: 8px 0;
+    border: 1px solid rgba(255,255,255,0.1); font-size: 13px; font-weight: 700;
+}
+
+#interact-banner {
+    position: absolute; top: 66%; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.9); border-left: 4px solid var(--green); padding: 8px 18px;
+    font-size: 14px; font-weight: 900; z-index: 30; display: none; pointer-events: none;
+}
+#kill-feed { position: absolute; top: 155px; right: 20px; z-index: 25; text-align: right; pointer-events: none; }
+.kf-msg { background: rgba(0,0,0,0.8); border-right: 3px solid var(--neon); padding: 5px 12px; margin-bottom: 5px; font-size: 12px; font-weight: 800; border-radius: 4px; }
+#fps-pill {
+    position: fixed; top: 12px; left: 16px; background: rgba(0,0,0,0.78);
+    padding: 4px 10px; border-radius: 6px; font-family: monospace; font-size: 12px; font-weight: 800;
+    color: var(--gold); z-index: 999; pointer-events: none; border: 1px solid rgba(250, 204, 21, 0.35);
+    white-space: nowrap;
+}
+
+#err-box {
+    position: fixed; left: 10px; right: 10px; top: 10px; z-index: 2147483647; display: none;
+    background: rgba(127, 29, 29, 0.96); color: #fff; border: 2px solid #fca5a5;
+    border-radius: 10px; padding: 12px 14px; font: 13px/1.5 monospace; white-space: pre-wrap; user-select: text;
+}
+
+/* Mobile Touch Controls (lightweight translucent fills — no backdrop-filter blur overhead) */
+#mobile-controls { display: none; position: fixed; inset: 0; z-index: 35; pointer-events: none; touch-action: none; }
+body.is-mobile #mobile-controls { display: block; }
+#m-joy-base {
+    position: absolute; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); left: 20px; width: 122px; height: 122px; border-radius: 50%;
+    background: rgba(15, 23, 42, 0.78); border: 2px solid rgba(255, 255, 255, 0.32);
+    pointer-events: auto; touch-action: none;
+}
+#m-joy-knob {
+    position: absolute; left: 50%; top: 50%; width: 50px; height: 50px; margin: -25px 0 0 -25px;
+    border-radius: 50%; background: radial-gradient(circle at 35% 35%, #facc15, #f59e0b);
+    border: 2px solid rgba(255,255,255,0.85); box-shadow: 0 4px 14px rgba(0,0,0,0.6); pointer-events: none;
+}
+.m-btn {
+    position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,0.38);
+    background: rgba(15, 23, 42, 0.82); color: #fff; font-weight: 900; font-size: 13px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    pointer-events: auto; touch-action: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.55); transition: transform 0.08s;
+}
+.m-btn:active, .m-btn.pressed { transform: scale(0.9); background: var(--neon); border-color: #fff; }
+#m-fire { bottom: calc(28px + env(safe-area-inset-bottom, 0px)); right: 20px; width: 76px; height: 76px; font-size: 24px; background: rgba(239, 68, 68, 0.86); border-color: #fca5a5; }
+#m-jump { bottom: calc(114px + env(safe-area-inset-bottom, 0px)); right: 24px; width: 54px; height: 54px; font-size: 18px; }
+#m-enter { bottom: calc(32px + env(safe-area-inset-bottom, 0px)); right: 108px; width: 58px; height: 58px; font-size: 16px; }
+#m-enter.ready { background: rgba(34, 197, 94, 0.9); border-color: #bbf7d0; }
+#m-weap { bottom: calc(102px + env(safe-area-inset-bottom, 0px)); right: 94px; width: 52px; height: 52px; font-size: 17px; }
+#m-down { bottom: calc(174px + env(safe-area-inset-bottom, 0px)); right: 24px; width: 52px; height: 52px; font-size: 17px; display: none; }
+
+@media (max-width: 900px), (pointer: coarse) {
+    .controls-card { display: none !important; }
+    .top-center { width: 96vw; top: 6px; gap: 4px; }
+    .mission-box {
+        display: block;
+        font-size: 10px;
+        padding: 3px 10px;
+        max-width: 92vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        backdrop-filter: none;
+        cursor: pointer;
+    }
+    .mission-box.expanded { white-space: normal; text-align: center; }
+    .toolbar { flex-wrap: nowrap; overflow-x: auto; max-width: 96vw; justify-content: flex-start; gap: 4px; padding: 2px; scrollbar-width: none; }
+    .toolbar::-webkit-scrollbar { display: none; }
+    .t-btn { padding: 5px 8px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+    .radar-panel { top: 64px; bottom: auto; left: 8px; transform: scale(0.54); transform-origin: top left; pointer-events: none; }
+    .gta-top-right { top: 64px; bottom: auto; right: 8px; }
+    .cash-txt { font-size: 18px; } .wanted-row { font-size: 15px; }
+    .weap-badge { font-size: 10px; padding: 3px 7px; }
+    .res-pill { display: none; }
+    #kill-feed { top: 158px; right: 8px; }
+    #interact-banner { top: auto; bottom: calc(174px + env(safe-area-inset-bottom, 0px)); font-size: 12px; padding: 7px 14px; pointer-events: auto; cursor: pointer; }
+    #fps-pill { top: auto; left: 50%; transform: translateX(-50%); bottom: calc(6px + env(safe-area-inset-bottom, 0px)); font-size: 10px; padding: 2px 7px; }
+    .shop-box { max-width: 94vw; max-height: 82vh; overflow-y: auto; padding: 14px; }
+    .wheel-circle { transform: scale(0.72); }
+}
+</style>
+
+<script>
+// Shows any loading / runtime error on screen (black screen = a hidden error)
+(function () {
+    function show(msg) {
+        var b = document.getElementById('err-box');
+        if (!b) return;
+        b.style.display = 'block';
+        b.textContent += (b.textContent ? '\n\n' : '') + '⚠️ ' + msg;
+    }
+    window.addEventListener('error', function (e) {
+        var t = e.target;
+        if (t && t.tagName === 'SCRIPT') show('Script չբեռնվեց (ինտերնետ կա՞). ' + (t.src || ''));
+        else show((e.message || 'Error') + (e.lineno ? ' (line ' + e.lineno + ')' : ''));
+    }, true);
+    window.addEventListener('unhandledrejection', function (e) { show(String(e.reason)); });
+})();
+</script>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "./vendor/three/build/three.module.js",
+        "three/addons/": "./vendor/three/examples/jsm/"
+    }
+}
+</script>
+</head>
+<body>
+
+<div id="boot-splash" style="position:fixed;inset:0;z-index:2147483645;background:radial-gradient(circle at center,#1e293b 0%,#020617 100%);color:#facc15;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 20px 'Noto Sans Armenian',sans-serif;gap:12px;text-align:center;padding:20px;">
+    <div>🦖 DINO HUNTER 3D</div>
+    <div style="font-size:13px;color:#cbd5e1;font-weight:600;">Նախապատրաստվում են 3D մոդելները...</div>
+</div>
+<div id="err-box"></div>
+<div id="fps-pill">v60 | ...</div>
+<div id="cb-top" class="cine-bar"></div>
+<div id="cb-bot" class="cine-bar"></div>
+
+<div id="game-mount"></div>
+<canvas id="hud-canvas"></canvas>
+<div id="interact-banner">Սեղմեք [E]</div>
+<div id="kill-feed"></div>
+
+<!-- TOP-CENTER MISSION & QUICK TOOLBAR -->
+<div class="top-center">
+    <div class="mission-box" id="mission-txt">🎯 ԱՌԱՔԵԼՈՒԹՅՈՒՆ. Որսացեք Եղջերուներ, Գայլեր կամ Ալֆա T-Rex (X-Ray Սրտի Կրակոց՝ Աջ Կոճակ / Z)</div>
+    <div class="toolbar">
+        <button class="t-btn active" id="btn-cam">🎥 3-րդ Դեմք [V]</button>
+        <button class="t-btn" id="btn-xray">🦴 X-Ray Ռենտգեն [Z / Աջ Կոճակ]</button>
+        <button class="t-btn" id="btn-weather">☀️ Եղանակ՝ Արևոտ</button>
+        <button class="t-btn" id="btn-time">🌇 Ժամ՝ Մայրամուտ</button>
+        <button class="t-btn active" id="btn-ssao">✨ Ultra SSAO: ՄԻԱՑՎԱԾ</button>
+        <button class="t-btn" id="btn-shop">🛒 Խանութ &amp; Հզորացում [U]</button>
+        <button class="t-btn" id="btn-wanted">🚓 Կանչել SWAT (★+1)</button>
+    </div>
+</div>
+
+<!-- TOP-RIGHT GTA VI HUD -->
+<div class="gta-top-right">
+    <div class="wanted-row" id="ui-stars"><span class="off">★</span><span class="off">★</span><span class="off">★</span><span class="off">★</span><span class="off">★</span></div>
+    <div class="cash-txt" id="ui-cash">$0003500</div>
+    <div class="weap-badge" id="ui-weap">🎯 .308 SNIPER RIFLE [8/40]</div>
+    <div class="res-pill">🪵 Փայտ: <b id="r-wood">80</b> | 🪨 Քար: <b id="r-stone">50</b> | 🥩 Միս: <b id="r-meat">6</b> | ⭐ XP: <b id="r-xp">150</b></div>
+</div>
+
+<!-- BOTTOM-LEFT ROTATING RADAR & SURVIVAL BARS -->
+<div class="radar-panel">
+    <div class="radar-ring">
+        <canvas id="radar-canvas" width="170" height="170"></canvas>
+    </div>
+    <div class="surv-bars">
+        <div class="s-row"><span>❤️ Առողջություն</span><div class="s-track"><div class="s-fill" id="bar-hp" style="width:100%; background:#22c55e;"></div></div></div>
+        <div class="s-row"><span>🛡️ Զրահ (Armor)</span><div class="s-track"><div class="s-fill" id="bar-ar" style="width:100%; background:#3b82f6;"></div></div></div>
+        <div class="s-row"><span>⚡ Դիմացկունություն</span><div class="s-track"><div class="s-fill" id="bar-st" style="width:100%; background:#facc15;"></div></div></div>
+        <div class="s-row"><span>🍖 Սնունդ / Ջուր</span><div class="s-track"><div class="s-fill" id="bar-hu" style="width:92%; background:#f97316;"></div></div></div>
+    </div>
+</div>
+
+<!-- BOTTOM-RIGHT CONTROLS & BUILDING -->
+<div class="controls-card">
+    <div class="build-row">
+        <button class="t-btn active" id="b-mode-hunt">🔫 Որս [B]</button>
+        <button class="t-btn" id="b-mode-build">🔨 Շին. [B]</button>
+        <button class="t-btn active" data-btype="floor">🪵 Հատակ</button>
+        <button class="t-btn" data-btype="wall">🧱 Պատ</button>
+        <button class="t-btn" data-btype="fire">🔥 Խարույկ</button>
+        <button class="t-btn" data-btype="turret">🤖 Տուրել</button>
+    </div>
+    <div><b>WASD</b> Շարժվել / Վարել | <b>Shift</b> Արագ | <b>Space</b> Թռչել | <b>R</b> Լիցք. / Պտտել | <b>G</b> Պար</div>
+    <div><b>Ձախ Կոճակ</b> Կրակել (Պահել՝ պտտել տեսախցիկը) | <b>Աջ Կոճակ / Z</b> X-Ray ❤️</div>
+    <div><b>E</b> Վարել / Մտնել տուն / Քանդել | <b>C</b> Stealth | <b>Tab</b> Զենքեր | <b>F</b> Ուտել միս 🍖</div>
+</div>
+
+<!-- GTA WEAPON WHEEL [TAB] -->
+<div id="weapon-wheel" onclick="this.style.display='none'">
+    <div class="wheel-circle" onclick="event.stopPropagation()">
+        <div style="text-align:center;"><b id="wheel-title" style="color:var(--gold); font-size:14px;">🎯 .308 SNIPER</b></div>
+        <div class="w-slot active" style="top:10px; left:159px;" data-w="0">🎯<span>1. .308 Սնայպեր</span></div>
+        <div class="w-slot" style="top:54px; right:42px;" data-w="1">🔫<span>2. AK-47 / M4</span></div>
+        <div class="w-slot" style="top:159px; right:10px;" data-w="2">💥<span>3. Shotgun</span></div>
+        <div class="w-slot" style="bottom:54px; right:42px;" data-w="3">🏹<span>4. Աղեղ</span></div>
+        <div class="w-slot" style="bottom:10px; left:159px;" data-w="4">🚀<span>5. RPG-7</span></div>
+        <div class="w-slot" style="bottom:54px; left:42px;" data-w="5">🔫<span>6. CZ Scorpion</span></div>
+        <div class="w-slot" style="top:159px; left:10px;" data-w="6">🔫<span>7. Thompson</span></div>
+        <div class="w-slot" style="top:54px; left:42px;" data-w="7">🔫<span>8. HK UMP-45</span></div>
+    </div>
+</div>
+
+<!-- UPGRADE SHOP MODAL [U] -->
+<div id="shop-modal">
+    <div class="shop-box">
+        <h2 style="color:var(--gold); margin-bottom:10px;">🛒 ՈՐՍՈՐԴԱԿԱՆ ԵՎ GTA ԶԻՆԱՆՈՑ</h2>
+        <div class="shop-item"><span>🎯 Հզորացնել Զենքերի Վնասը (+35% Damage)</span><button class="t-btn" id="buy-dmg">$800</button></div>
+        <div class="shop-item"><span>🛡️ Գնել Լիարժեք Զրահ և Առողջություն (100% HP/Armor)</span><button class="t-btn" id="buy-heal">$300</button></div>
+        <div class="shop-item"><span>📦 Լիցքավորել Բոլոր Զենքերի Փամփուշտները + RPG</span><button class="t-btn" id="buy-ammo">$400</button></div>
+        <div class="shop-item"><span>🚁 Պատվիրել Մարտական Ուղղաթիռ (Ձեր կողքին)</span><button class="t-btn" id="buy-heli">$1200</button></div>
+        <div class="shop-item"><span>🦖 Կանչել Վարժեցված Մարտական Ռապտոր</span><button class="t-btn" id="buy-dino">$900</button></div>
+        <button class="t-btn" style="width:100%; margin-top:12px; padding:9px; background:var(--red);" id="close-shop">Փակել Խանութը [U / ESC]</button>
+    </div>
+</div>
+
+<!-- MOBILE TOUCH CONTROLS -->
+<div id="mobile-controls">
+    <div id="m-joy-base"><div id="m-joy-knob"></div></div>
+    <button class="m-btn" id="m-fire" aria-label="Fire">🔥</button>
+    <button class="m-btn" id="m-jump" aria-label="Jump">⬆️</button>
+    <button class="m-btn" id="m-down" aria-label="Down">⬇️</button>
+    <button class="m-btn" id="m-enter" aria-label="Enter Vehicle">🚗</button>
+    <button class="m-btn" id="m-weap" aria-label="Weapons">🔫</button>
+</div>
+
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
