@@ -660,7 +660,7 @@ export function fireTankCannon(v) {
                 applySwatUnitHit(su, o, 450 * player.dmgMult, '💥 ԱՐԿ');
             }
         });
-        if (!su.carDead && su.mesh.position.distanceTo(endPt) < 10) {
+        if (!su.carDead && !su.noCar && su.mesh.position.distanceTo(endPt) < 10) {
             applySwatUnitHit(su, null, 600 * player.dmgMult);
         }
     }
@@ -783,7 +783,7 @@ export function fireWeapon(cx, cy) {
                     if (d < 9.5) applySwatUnitHit(su, o, w.dmg * Math.max(0.4, 1 - d / 10) * player.dmgMult, '🚀 RPG');
                 }
             });
-            if (!su.carDead && su.mesh.position.distanceTo(endPt) < 9.5) {
+            if (!su.carDead && !su.noCar && su.mesh.position.distanceTo(endPt) < 9.5) {
                 const d = su.mesh.position.distanceTo(endPt);
                 applySwatUnitHit(su, null, w.dmg * Math.max(0.4, 1 - d / 10) * player.dmgMult);
             }
@@ -846,7 +846,12 @@ export function updatePlayerAndVehicles(dt, rawDt, now) {
     if (player.vehicle) {
         const v = player.vehicle;
         const maxSpd = v.type === 'tank' ? 24 : v.type === 'jeep2' ? 27 : v.type === 'jet' ? 75 : v.type === 'gazelle' ? 40 : v.type === 'md500' ? 38 : v.type === 'boat' ? 22 : v.type === 'mboat' ? 18 : v.type === 'porsche' ? 34 : v.type === 'olds' ? 26 : v.type === 'cop' ? 30 : (v.type === 'atv' ? 24 : 20);
-        const thr = (keys['w'] ? 1 : 0) - (keys['s'] ? 0.5 : 0) + (player.joyMag > 0.1 ? -player.joyY : 0);
+        const joyThr = player.joyMag > 0.1
+            ? ((-player.joyY > 0.15 || player.joyY > 0.15)
+                ? -player.joyY
+                : (!v.flies && Math.abs(player.joyX) > 0.25 && player.joyY < 0.15 ? Math.abs(player.joyX) * 0.75 : -player.joyY))
+            : 0;
+        const thr = (keys['w'] ? 1 : 0) - (keys['s'] ? 0.5 : 0) + joyThr;
         const clampedThr = Math.max(-0.5, Math.min(1, thr));
         const accel = clampedThr > 0 ? maxSpd * clampedThr : clampedThr * 24;
         v.speed += (accel - v.speed * 2.0) * dt;

@@ -5,12 +5,13 @@ give exact copy-paste terminal commands. Save files straight into this folder (d
 Run the game: `cd /run/media/sur2004/imortant/HomeSimulatorGame && npm start`
 
 ## Layout
-- `index.html` — the whole game (one `<script type="module">`, Three.js r160 from CDN importmap).
-- `*_glb.js` — GLB models embedded as base64 (`window.PROPS*_B64`, `PORSCHE_GLB_B64`, `TREX…`), because file:// blocks fetch.
-  Loader `loadProps()` merges PROPS_B64…PROPS7_B64, parses each with GLTFLoader, then `whenProp(name, cb)` callbacks run.
-- `main.js` — Electron window, loads index.html.
-- A version tag is shown bottom-left (`vNN | FPS | GLB list | animals GLB x/y`). Bump it on every change so the user can
-  tell whether the new file is really running.
+- `public/index.html` — UI/HUD shell, `Noto Sans Armenian` font, local importmap pointing to `./vendor/three/`, loads `./js/main.js`.
+- `public/js/` — 11 modular ES files: `state.js`, `audio.js`, `physics.js`, `scene.js`, `loader.js`, `terrain.js`, `vehicles.js`, `ai.js`, `player.js`, `ui.js`, `main.js`.
+- `public/models/` — 38 binary `.glb` assets + `manifest.json`, loaded asynchronously via `GLTFLoader` + `THREE.LoadingManager` in `loader.js`, then `whenProp(name, cb)` callbacks run.
+- `public/vendor/three/` — vendored Three.js r160 (`build/three.module.js` + `examples/jsm/`) so both Vercel and offline Electron work with zero CDN dependency.
+- `main.js` — hardened Electron wrapper (`nodeIntegration: false`, `contextIsolation: true`, `sandbox: true`) serving `public/` over a privileged `app://` protocol.
+- `vercel.json` — serves only `public/` (`"outputDirectory": "public"`), keeping `CLAUDE.md`, `main.js`, and `package.json` private.
+- A compact version tag is shown top-left (`#fps-pill`: `v60 | <fps> FPS`). Bump it on every change so the user can tell whether the new build is really running.
 - Debug keys: **K** = name of the object in the screen centre, **L** = bloom on/off.
 
 ## Mistakes already made (don't repeat)

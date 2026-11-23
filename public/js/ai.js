@@ -916,8 +916,9 @@ export function updateSwat(dt) {
     }
 
     swatUnits.forEach(s => {
-        if ((s.noCar || s.carDead) && s.officers && s.officers.length > 0 && s.officers[0]) {
-            s.mesh.position.copy(s.officers[0].position);
+        if (s.noCar || s.carDead) {
+            const lead = (s.officers || []).find(o => o && !o.userData.dead);
+            if (lead) s.mesh.position.copy(lead.position);
         }
         const sx = s.mesh.position.x, sz = s.mesh.position.z;
         const dx = player.x - sx, dz = player.z - sz;

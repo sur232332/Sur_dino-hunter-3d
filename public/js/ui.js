@@ -278,6 +278,10 @@ function handleInteractKey() {
 export function initUI() {
     syncUI();
 
+    ['keydown', 'pointerdown'].forEach(ev => {
+        window.addEventListener(ev, () => sfx.startAmbient(), { once: true });
+    });
+
     let isDragging = false, downX = 0, downY = 0;
 
     renderer.domElement.addEventListener('mousedown', e => {
@@ -569,7 +573,7 @@ export function initUI() {
         player.joyX = 0;
         player.joyY = 0;
         player.joyMag = 0;
-        keys['w'] = keys['s'] = keys['a'] = keys['d'] = keys['shift'] = false;
+        keys['shift'] = false;
     };
 
     const updateJoy = (t) => {
@@ -589,13 +593,6 @@ export function initUI() {
         player.joyX = nx;
         player.joyY = ny;
         player.joyMag = mag;
-
-        // Keep boolean keys in sync for dinosaur mount animation & UI checks
-        const inCar = !!player.vehicle && !player.vehicle.flies;
-        keys['a'] = nx < -0.22;
-        keys['d'] = nx > 0.22;
-        keys['s'] = ny > 0.30;
-        keys['w'] = ny < -0.20 || (inCar && (keys['a'] || keys['d']) && ny < 0.15);
         keys['shift'] = !player.vehicle && mag > 0.82 && ny < -0.35;
     };
 
