@@ -2,7 +2,7 @@
 <html lang="hy">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>DEER & DINO HUNTER 2026: GTA VI ULTRA EDITION</title>
 <style>
 :root {
@@ -14,9 +14,9 @@
     --green: #4ade80;
     --red: #ef4444;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', system-ui, sans-serif; }
-body, html { width: 100%; height: 100%; overflow: hidden; background: #04070d; color: #f8fafc; }
-#game-mount { position: absolute; inset: 0; z-index: 1; }
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', system-ui, sans-serif; }
+body, html { width: 100%; height: 100%; overflow: hidden; background: #04070d; color: #f8fafc; touch-action: none; overscroll-behavior: none; }
+#game-mount { position: absolute; inset: 0; z-index: 1; touch-action: none; }
 #hud-canvas { position: absolute; inset: 0; z-index: 15; pointer-events: none; }
 
 /* Cinematic Letterbox for Bullet-Cam */
@@ -126,19 +126,49 @@ body.bullet-cam #cb-top, body.bullet-cam #cb-bot { height: 68px; }
 
 #err-box { position: fixed; left: 10px; right: 10px; top: 10px; z-index: 999; display: none; background: rgba(127, 29, 29, 0.96); color: #fff; border: 2px solid #fca5a5; border-radius: 10px; padding: 12px 14px; font: 13px/1.5 monospace; white-space: pre-wrap; user-select: text; }
 
-@media (max-width: 820px) {
-    .controls-card { display: none; }
-    #fps-pill { top: auto; bottom: 8px; left: 8px; font-size: 11px; }
-    .top-center { width: 96vw; top: 6px; }
-    .mission-box { white-space: normal; text-align: center; font-size: 11px; padding: 5px 10px; }
-    .toolbar { gap: 4px; }
-    .t-btn { padding: 4px 7px; font-size: 10px; }
-    .gta-top-right { top: auto; bottom: 14px; right: 10px; }
-    .cash-txt { font-size: 22px; } .wanted-row { font-size: 20px; }
+#mobile-controls { display: none; position: fixed; inset: 0; z-index: 35; pointer-events: none; touch-action: none; }
+body.is-mobile #mobile-controls { display: block; }
+#m-joy-base {
+    position: absolute; bottom: 26px; left: 22px; width: 126px; height: 126px; border-radius: 50%;
+    background: rgba(15, 23, 42, 0.52); border: 2px solid rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(4px); pointer-events: auto; touch-action: none;
+}
+#m-joy-knob {
+    position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px;
+    border-radius: 50%; background: radial-gradient(circle at 35% 35%, #facc15, #f59e0b);
+    border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 4px 16px rgba(0,0,0,0.6); pointer-events: none;
+}
+.m-btn {
+    position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,0.35);
+    background: rgba(15, 23, 42, 0.72); color: #fff; font-weight: 900; font-size: 13px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    pointer-events: auto; touch-action: none; backdrop-filter: blur(4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.55); transition: transform 0.08s;
+}
+.m-btn:active, .m-btn.pressed { transform: scale(0.9); background: var(--neon); border-color: #fff; }
+#m-fire { bottom: 32px; right: 24px; width: 76px; height: 76px; font-size: 24px; background: rgba(239, 68, 68, 0.82); border-color: #fca5a5; }
+#m-jump { bottom: 118px; right: 26px; width: 56px; height: 56px; font-size: 18px; }
+#m-enter { bottom: 36px; right: 112px; width: 58px; height: 58px; font-size: 16px; }
+#m-enter.ready { background: rgba(34, 197, 94, 0.88); border-color: #bbf7d0; }
+#m-weap { bottom: 106px; right: 98px; width: 52px; height: 52px; font-size: 17px; }
+#m-down { bottom: 174px; right: 26px; width: 52px; height: 52px; font-size: 17px; display: none; }
+
+@media (max-width: 900px), (pointer: coarse) {
+    .controls-card { display: none !important; }
+    .top-center { width: 96vw; top: 6px; gap: 3px; }
+    .mission-box { display: none; }
+    .toolbar { flex-wrap: nowrap; overflow-x: auto; max-width: 96vw; justify-content: flex-start; gap: 4px; padding: 2px; scrollbar-width: none; }
+    .toolbar::-webkit-scrollbar { display: none; }
+    .t-btn { padding: 5px 8px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+    .radar-panel { top: 44px; bottom: auto; left: 8px; transform: scale(0.56); transform-origin: top left; pointer-events: none; }
+    .gta-top-right { top: 44px; bottom: auto; right: 8px; }
+    .cash-txt { font-size: 19px; } .wanted-row { font-size: 16px; }
+    .weap-badge { font-size: 11px; padding: 3px 8px; }
     .res-pill { display: none; }
-    .radar-panel { bottom: 10px; left: 10px; transform: scale(0.72); transform-origin: bottom left; }
-    #kill-feed { top: auto; bottom: 120px; right: 10px; }
-    .shop-box, .wheel-circle { max-width: 94vw; }
+    #kill-feed { top: 145px; right: 8px; }
+    #interact-banner { top: auto; bottom: 178px; font-size: 12px; padding: 7px 14px; pointer-events: auto; cursor: pointer; }
+    .shop-box { max-width: 94vw; max-height: 85vh; overflow-y: auto; padding: 14px; }
+    .wheel-circle { transform: scale(0.76); }
 }
 </style>
 
@@ -182,6 +212,10 @@ body.bullet-cam #cb-top, body.bullet-cam #cb-bot { height: 68px; }
 </head>
 <body>
 
+<div id="boot-splash" style="position:fixed;inset:0;z-index:2147483645;background:radial-gradient(circle at center,#1e293b 0%,#020617 100%);color:#facc15;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 20px sans-serif;gap:12px;text-align:center;padding:20px;">
+    <div>🦖 DINO HUNTER 3D</div>
+    <div style="font-size:13px;color:#cbd5e1;font-weight:600;">Բեռնվում են 3D մոդելները... (առաջին անգամ կարող է տևել մի քանի վայրկյան)</div>
+</div>
 <div id="err-box"></div>
 <div id="cb-top" class="cine-bar"></div>
 <div id="cb-bot" class="cine-bar"></div>
@@ -267,6 +301,16 @@ body.bullet-cam #cb-top, body.bullet-cam #cb-bot { height: 68px; }
         <div class="shop-item"><span>🦖 Կանչել Վարժեցված Մարտական Ռապտոր</span><button class="t-btn" id="buy-dino">$900</button></div>
         <button class="t-btn" style="width:100%; margin-top:12px; padding:9px; background:var(--red);" id="close-shop">Փակել Խանութը [U / ESC]</button>
     </div>
+</div>
+
+<!-- MOBILE TOUCH CONTROLS -->
+<div id="mobile-controls">
+    <div id="m-joy-base"><div id="m-joy-knob"></div></div>
+    <button class="m-btn" id="m-fire" aria-label="Fire">🔥</button>
+    <button class="m-btn" id="m-jump" aria-label="Jump">⬆️</button>
+    <button class="m-btn" id="m-down" aria-label="Down">⬇️</button>
+    <button class="m-btn" id="m-enter" aria-label="Enter Vehicle">🚗</button>
+    <button class="m-btn" id="m-weap" aria-label="Weapons">🔫</button>
 </div>
 
 <script type="module">
@@ -413,9 +457,11 @@ scene.fog = new THREE.FogExp2(0xd99b66, 0.0036);
 const camera = new THREE.PerspectiveCamera(60, W / H, 0.25, 1600);
 let water = null;
 const water2Mats = [];
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
+if (isMobile) document.body.classList.add('is-mobile');
+const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, powerPreference: 'high-performance' });
 renderer.setSize(W, H);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.0 : 1.5));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -438,6 +484,11 @@ const ssaoPass = new SSAOPass(scene, camera, W, H);
 ssaoPass.kernelRadius = 11;
 ssaoPass.minDistance = 0.002;
 ssaoPass.maxDistance = 0.11;
+if (isMobile) {
+    ssaoPass.enabled = false;
+    const sb = document.getElementById('btn-ssao');
+    if (sb) { sb.classList.remove('active'); sb.textContent = '✨ Ultra SSAO: ԱՆՋԱՏՎԱԾ'; }
+}
 composer.addPass(ssaoPass);
 
 // NaN / Infinity pixels (from some GLB materials) -> black: otherwise the bloom blur spreads them into big black boxes
@@ -506,7 +557,7 @@ scene.add(hemiLight);
 
 const sunLight = new THREE.DirectionalLight(0xffe6b8, 3.1);
 sunLight.castShadow = true;
-sunLight.shadow.mapSize.set(2048, 2048);
+sunLight.shadow.mapSize.set(isMobile ? 1024 : 2048, isMobile ? 1024 : 2048);
 const d = 68;
 sunLight.shadow.camera.left = -d; sunLight.shadow.camera.right = d;
 sunLight.shadow.camera.top = d; sunLight.shadow.camera.bottom = -d;
@@ -976,6 +1027,7 @@ window.gameReady = false;
     const names = Object.keys(data);
     const total = names.length + 2; // + trex + porsche
     let done = 0;
+    const bs = document.getElementById('boot-splash'); if (bs) bs.remove();
     const ov = document.createElement('div');
     ov.style.cssText = 'position:fixed;inset:0;z-index:2147483646;background:radial-gradient(circle at center,#1e293b 0%,#020617 100%);color:#facc15;display:flex;flex-direction:column;align-items:center;justify-content:center;font:bold 24px sans-serif;gap:14px;transition:opacity 0.45s ease';
     ov.innerHTML = '<div style="letter-spacing:1px">🦖 DINO HUNTER — Բեռնվում է...</div>' +
@@ -3334,6 +3386,123 @@ document.getElementById('btn-wanted').onclick = () => {
     pushFeed('🚓 GTA WANTED LEVEL UP! Ռեյնջերների SWAT ջոկատը մոտենում է մայրուղով!');
 };
 
+// ---- MOBILE MULTI-TOUCH CONTROLS (virtual joystick + swipe look + action buttons) ----
+let mobileFiring = false;
+{
+    const joyBase = document.getElementById('m-joy-base');
+    const joyKnob = document.getElementById('m-joy-knob');
+    const mFire = document.getElementById('m-fire');
+    const mJump = document.getElementById('m-jump');
+    const mDown = document.getElementById('m-down');
+    const mEnter = document.getElementById('m-enter');
+    const mWeap = document.getElementById('m-weap');
+    const bannerEl = document.getElementById('interact-banner');
+    let joyId = null, lookId = null, lookX = 0, lookY = 0;
+
+    const resetJoy = () => {
+        joyId = null;
+        if (joyKnob) joyKnob.style.transform = 'translate(0px, 0px)';
+        keys['w'] = keys['s'] = keys['a'] = keys['d'] = keys['shift'] = false;
+    };
+    const updateJoy = (t) => {
+        const r = joyBase.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2, maxR = r.width * 0.42;
+        let dx = t.clientX - cx, dy = t.clientY - cy;
+        const d = Math.hypot(dx, dy) || 1;
+        if (d > maxR) { dx = dx / d * maxR; dy = dy / d * maxR; }
+        joyKnob.style.transform = `translate(${dx}px, ${dy}px)`;
+        const nx = dx / maxR, ny = dy / maxR;
+        keys['w'] = ny < -0.22;
+        keys['s'] = ny > 0.28;
+        keys['a'] = nx < -0.24;
+        keys['d'] = nx > 0.24;
+        keys['shift'] = !player.vehicle && ny < -0.82;
+    };
+    if (joyBase) {
+        joyBase.addEventListener('touchstart', e => {
+            e.preventDefault(); e.stopPropagation();
+            if (joyId === null && e.changedTouches.length) {
+                joyId = e.changedTouches[0].identifier;
+                updateJoy(e.changedTouches[0]);
+            }
+        }, { passive: false });
+        joyBase.addEventListener('touchmove', e => {
+            e.preventDefault(); e.stopPropagation();
+            for (const t of e.changedTouches) if (t.identifier === joyId) updateJoy(t);
+        }, { passive: false });
+        const endJoy = e => { for (const t of e.changedTouches) if (t.identifier === joyId) resetJoy(); };
+        joyBase.addEventListener('touchend', endJoy);
+        joyBase.addEventListener('touchcancel', endJoy);
+    }
+
+    // Touch-drag anywhere on the game canvas to rotate camera
+    mountEl.addEventListener('touchstart', e => {
+        if (!isMobile) return;
+        for (const t of e.changedTouches) {
+            if (lookId === null && t.identifier !== joyId) {
+                lookId = t.identifier; lookX = t.clientX; lookY = t.clientY;
+                sfx.init();
+            }
+        }
+    }, { passive: true });
+    mountEl.addEventListener('touchmove', e => {
+        if (!isMobile || lookId === null) return;
+        for (const t of e.changedTouches) {
+            if (t.identifier === lookId) {
+                const dx = t.clientX - lookX, dy = t.clientY - lookY;
+                lookX = t.clientX; lookY = t.clientY;
+                if (player.vehicle) {
+                    player.camOff = (player.camOff || 0) - dx * 0.0065;
+                    player.camOffT = 2.0;
+                } else {
+                    player.yaw -= dx * 0.0065;
+                    player.pitch = Math.max(-0.55, Math.min(0.85, player.pitch + dy * 0.005));
+                }
+            }
+        }
+    }, { passive: true });
+    const endLook = e => { for (const t of e.changedTouches) if (t.identifier === lookId) lookId = null; };
+    mountEl.addEventListener('touchend', endLook);
+    mountEl.addEventListener('touchcancel', endLook);
+
+    const triggerE = () => window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' }));
+    if (mEnter) mEnter.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); triggerE(); }, { passive: false });
+    if (bannerEl) bannerEl.addEventListener('click', () => { if (isMobile) triggerE(); });
+    if (mWeap) mWeap.addEventListener('touchstart', e => {
+        e.preventDefault(); e.stopPropagation();
+        const ww = document.getElementById('weapon-wheel');
+        ww.style.display = ww.style.display === 'flex' ? 'none' : 'flex';
+    }, { passive: false });
+    if (mFire) {
+        mFire.addEventListener('touchstart', e => {
+            e.preventDefault(); e.stopPropagation();
+            sfx.init();
+            mobileFiring = true;
+            mFire.classList.add('pressed');
+            fireWeapon(W / 2, H / 2);
+        }, { passive: false });
+        const stopFire = () => { mobileFiring = false; mFire.classList.remove('pressed'); };
+        mFire.addEventListener('touchend', stopFire);
+        mFire.addEventListener('touchcancel', stopFire);
+    }
+    if (mJump) {
+        mJump.addEventListener('touchstart', e => {
+            e.preventDefault(); e.stopPropagation();
+            keys[' '] = true; mJump.classList.add('pressed');
+            if (!player.vehicle && player.vy === 0) player.vy = 7.8;
+        }, { passive: false });
+        const stopJump = () => { keys[' '] = false; mJump.classList.remove('pressed'); };
+        mJump.addEventListener('touchend', stopJump);
+        mJump.addEventListener('touchcancel', stopJump);
+    }
+    if (mDown) {
+        mDown.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); keys['c'] = true; mDown.classList.add('pressed'); }, { passive: false });
+        const stopDown = () => { keys['c'] = false; mDown.classList.remove('pressed'); };
+        mDown.addEventListener('touchend', stopDown);
+        mDown.addEventListener('touchcancel', stopDown);
+    }
+}
+
 document.querySelectorAll('.w-slot').forEach(s => {
     s.onclick = () => {
         curWeap = Number(s.dataset.w);
@@ -3776,7 +3945,7 @@ function animate(now) {
 function animateInner(now) {
     if (!window.gameReady) { lastT = now; return; }
     const rawDt = Math.min(0.05, (now - lastT) / 1000);
-    fpsFrames++; if (now - fpsLast >= 500) { fpsPill.textContent = 'v53 | FPS: ' + Math.round(fpsFrames * 1000 / (now - fpsLast)) + ' | GLB: ' + Object.keys(PROPS).join(',') + ' | animals GLB: ' + creatures.filter(c => c.glbApplied).length + '/' + creatures.length + (window.debugK ? ' | ' + window.debugK : ''); fpsFrames = 0; fpsLast = now; }
+    fpsFrames++; if (now - fpsLast >= 500) { fpsPill.textContent = 'v54 | FPS: ' + Math.round(fpsFrames * 1000 / (now - fpsLast)) + ' | GLB: ' + Object.keys(PROPS).join(',') + ' | animals GLB: ' + creatures.filter(c => c.glbApplied).length + '/' + creatures.length + (window.debugK ? ' | ' + window.debugK : ''); fpsFrames = 0; fpsLast = now; }
     lastT = now;
     const dt = bulletCam.active ? rawDt * 0.18 : rawDt;
     const elapsed = now / 1000;
@@ -3784,6 +3953,7 @@ function animateInner(now) {
     windUni.uTime.value = elapsed;
     water.material.uniforms['time'].value += dt * 0.75;
     if (fireCd > 0) fireCd -= rawDt;
+    if (mobileFiring && fireCd <= 0) fireWeapon(W / 2, H / 2);
     if (camShake > 0) camShake = Math.max(0, camShake - rawDt * 1.5);
     if (muzzleFlashLight.intensity > 0) muzzleFlashLight.intensity = Math.max(0, muzzleFlashLight.intensity - rawDt * 45);
     if (fpRecoil > 0) fpRecoil = Math.max(0, fpRecoil - rawDt * 0.85);
@@ -4135,11 +4305,16 @@ function animateInner(now) {
         });
     }
     const banner = document.getElementById('interact-banner');
-    if (nearTarget) { banner.style.display = 'block'; banner.textContent = 'Սեղմեք [E] — ' + nearTarget.label; }
-    else if (player.vehicle && player.vehicle.flies) { banner.style.display = 'block'; banner.textContent = '🚁 [Space / Shift] Վերև ⬆️ | [C / Ctrl] Ներքև ⬇️ | [WASD] Թռչել | [E] Իջնել'; }
-    else if (player.vehicle && player.vehicle.type === 'tank') { banner.style.display = 'block'; banner.textContent = '🪖 [WASD] Վարել | [Space / Ձախ կոճակ] Կրակել թնդանոթով 💥 | [E] Իջնել'; }
-    else if (player.vehicle || player.mount) { banner.style.display = 'block'; banner.textContent = 'Սեղմեք [E] — իջնել'; }
+    if (nearTarget) { banner.style.display = 'block'; banner.textContent = (isMobile ? 'Սեղմիր՝ ' : 'Սեղմեք [E] — ') + nearTarget.label; }
+    else if (player.vehicle && player.vehicle.flies) { banner.style.display = 'block'; banner.textContent = isMobile ? '🚁 ⬆️ Վերև | ⬇️ Ներքև | 🚗 Իջնել' : '🚁 [Space / Shift] Վերև ⬆️ | [C / Ctrl] Ներքև ⬇️ | [WASD] Թռչել | [E] Իջնել'; }
+    else if (player.vehicle && player.vehicle.type === 'tank') { banner.style.display = 'block'; banner.textContent = isMobile ? '🪖 🔥 Կրակել թնդանոթով | 🚗 Իջնել' : '🪖 [WASD] Վարել | [Space / Ձախ կոճակ] Կրակել թնդանոթով 💥 | [E] Իջնել'; }
+    else if (player.vehicle || player.mount) { banner.style.display = 'block'; banner.textContent = isMobile ? 'Սեղմիր 🚗 — իջնել' : 'Սեղմեք [E] — իջնել'; }
     else banner.style.display = 'none';
+    if (isMobile) {
+        const me = document.getElementById('m-enter'), md = document.getElementById('m-down');
+        if (me) me.classList.toggle('ready', !!(nearTarget || player.vehicle || player.mount));
+        if (md) md.style.display = (player.vehicle && player.vehicle.flies) ? 'flex' : 'none';
+    }
 
     // 4. WORLD SYSTEMS
     updateCreatures(dt);
