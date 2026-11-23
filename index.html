@@ -15,7 +15,7 @@
     --red: #ef4444;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', system-ui, sans-serif; }
-body, html { width: 100%; height: 100%; overflow: hidden; background: #04070d; color: #f8fafc; touch-action: none; overscroll-behavior: none; }
+body, html { width: 100%; height: 100%; height: 100dvh; overflow: hidden; background: #04070d; color: #f8fafc; touch-action: none; overscroll-behavior: none; }
 #game-mount { position: absolute; inset: 0; z-index: 1; touch-action: none; }
 #hud-canvas { position: absolute; inset: 0; z-index: 15; pointer-events: none; }
 
@@ -129,12 +129,12 @@ body.bullet-cam #cb-top, body.bullet-cam #cb-bot { height: 68px; }
 #mobile-controls { display: none; position: fixed; inset: 0; z-index: 35; pointer-events: none; touch-action: none; }
 body.is-mobile #mobile-controls { display: block; }
 #m-joy-base {
-    position: absolute; bottom: 26px; left: 22px; width: 126px; height: 126px; border-radius: 50%;
+    position: absolute; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); left: 20px; width: 122px; height: 122px; border-radius: 50%;
     background: rgba(15, 23, 42, 0.52); border: 2px solid rgba(255, 255, 255, 0.28);
     backdrop-filter: blur(4px); pointer-events: auto; touch-action: none;
 }
 #m-joy-knob {
-    position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px;
+    position: absolute; left: 50%; top: 50%; width: 50px; height: 50px; margin: -25px 0 0 -25px;
     border-radius: 50%; background: radial-gradient(circle at 35% 35%, #facc15, #f59e0b);
     border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 4px 16px rgba(0,0,0,0.6); pointer-events: none;
 }
@@ -146,12 +146,12 @@ body.is-mobile #mobile-controls { display: block; }
     box-shadow: 0 6px 18px rgba(0,0,0,0.55); transition: transform 0.08s;
 }
 .m-btn:active, .m-btn.pressed { transform: scale(0.9); background: var(--neon); border-color: #fff; }
-#m-fire { bottom: 32px; right: 24px; width: 76px; height: 76px; font-size: 24px; background: rgba(239, 68, 68, 0.82); border-color: #fca5a5; }
-#m-jump { bottom: 118px; right: 26px; width: 56px; height: 56px; font-size: 18px; }
-#m-enter { bottom: 36px; right: 112px; width: 58px; height: 58px; font-size: 16px; }
+#m-fire { bottom: calc(28px + env(safe-area-inset-bottom, 0px)); right: 20px; width: 76px; height: 76px; font-size: 24px; background: rgba(239, 68, 68, 0.82); border-color: #fca5a5; }
+#m-jump { bottom: calc(114px + env(safe-area-inset-bottom, 0px)); right: 24px; width: 54px; height: 54px; font-size: 18px; }
+#m-enter { bottom: calc(32px + env(safe-area-inset-bottom, 0px)); right: 108px; width: 58px; height: 58px; font-size: 16px; }
 #m-enter.ready { background: rgba(34, 197, 94, 0.88); border-color: #bbf7d0; }
-#m-weap { bottom: 106px; right: 98px; width: 52px; height: 52px; font-size: 17px; }
-#m-down { bottom: 174px; right: 26px; width: 52px; height: 52px; font-size: 17px; display: none; }
+#m-weap { bottom: calc(102px + env(safe-area-inset-bottom, 0px)); right: 94px; width: 52px; height: 52px; font-size: 17px; }
+#m-down { bottom: calc(174px + env(safe-area-inset-bottom, 0px)); right: 24px; width: 52px; height: 52px; font-size: 17px; display: none; }
 
 @media (max-width: 900px), (pointer: coarse) {
     .controls-card { display: none !important; }
@@ -160,15 +160,15 @@ body.is-mobile #mobile-controls { display: block; }
     .toolbar { flex-wrap: nowrap; overflow-x: auto; max-width: 96vw; justify-content: flex-start; gap: 4px; padding: 2px; scrollbar-width: none; }
     .toolbar::-webkit-scrollbar { display: none; }
     .t-btn { padding: 5px 8px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
-    .radar-panel { top: 44px; bottom: auto; left: 8px; transform: scale(0.56); transform-origin: top left; pointer-events: none; }
+    .radar-panel { top: 44px; bottom: auto; left: 8px; transform: scale(0.54); transform-origin: top left; pointer-events: none; }
     .gta-top-right { top: 44px; bottom: auto; right: 8px; }
-    .cash-txt { font-size: 19px; } .wanted-row { font-size: 16px; }
-    .weap-badge { font-size: 11px; padding: 3px 8px; }
+    .cash-txt { font-size: 18px; } .wanted-row { font-size: 15px; }
+    .weap-badge { font-size: 10px; padding: 3px 7px; }
     .res-pill { display: none; }
-    #kill-feed { top: 145px; right: 8px; }
-    #interact-banner { top: auto; bottom: 178px; font-size: 12px; padding: 7px 14px; pointer-events: auto; cursor: pointer; }
-    .shop-box { max-width: 94vw; max-height: 85vh; overflow-y: auto; padding: 14px; }
-    .wheel-circle { transform: scale(0.76); }
+    #kill-feed { top: 138px; right: 8px; }
+    #interact-banner { top: auto; bottom: calc(174px + env(safe-area-inset-bottom, 0px)); font-size: 12px; padding: 7px 14px; pointer-events: auto; cursor: pointer; }
+    .shop-box { max-width: 94vw; max-height: 82vh; overflow-y: auto; padding: 14px; }
+    .wheel-circle { transform: scale(0.72); }
 }
 </style>
 
@@ -529,6 +529,7 @@ composer.addPass(gtaGradePass);
 
 const smaaPass = new SMAAPass(W * renderer.getPixelRatio(), H * renderer.getPixelRatio());
 composer.addPass(smaaPass);
+const renderFrame = () => (isMobile && !ssaoPass.enabled) ? renderer.render(scene, camera) : composer.render();
 
 window.addEventListener('resize', () => {
     W = hudCanvas.width = window.innerWidth;
@@ -3204,12 +3205,14 @@ let isDragging = false, downX = 0, downY = 0, nearTarget = null;
 const mouseVec = new THREE.Vector2();
 
 renderer.domElement.addEventListener('mousedown', e => {
+    if (isMobile) return;
     if (e.button === 2) { toggleXRayScope(); return; }
     downX = e.clientX; downY = e.clientY;
     isDragging = true;
 });
 
 window.addEventListener('mousemove', e => {
+    if (isMobile) return;
     mouseVec.x = (e.clientX / W) * 2 - 1;
     mouseVec.y = -(e.clientY / H) * 2 + 1;
 
@@ -3231,7 +3234,7 @@ window.addEventListener('mousemove', e => {
 });
 
 window.addEventListener('mouseup', e => {
-    if (!isDragging) return;
+    if (isMobile || !isDragging) return;
     isDragging = false;
     if (Math.hypot(e.clientX - downX, e.clientY - downY) < 6 && e.button === 0) {
         if (player.mode === 'build') {
@@ -3412,15 +3415,17 @@ let mobileFiring = false;
         if (d > maxR) { dx = dx / d * maxR; dy = dy / d * maxR; }
         joyKnob.style.transform = `translate(${dx}px, ${dy}px)`;
         const nx = dx / maxR, ny = dy / maxR;
-        keys['w'] = ny < -0.22;
-        keys['s'] = ny > 0.28;
-        keys['a'] = nx < -0.24;
-        keys['d'] = nx > 0.24;
-        keys['shift'] = !player.vehicle && ny < -0.82;
+        const inCar = !!player.vehicle && !player.vehicle.flies;
+        keys['a'] = nx < -0.22;
+        keys['d'] = nx > 0.22;
+        keys['s'] = ny > 0.30;
+        keys['w'] = ny < -0.20 || (inCar && (keys['a'] || keys['d']) && ny < 0.15);
+        keys['shift'] = !player.vehicle && ny < -0.80;
     };
     if (joyBase) {
         joyBase.addEventListener('touchstart', e => {
             e.preventDefault(); e.stopPropagation();
+            sfx.startAmbient();
             if (joyId === null && e.changedTouches.length) {
                 joyId = e.changedTouches[0].identifier;
                 updateJoy(e.changedTouches[0]);
@@ -3435,32 +3440,37 @@ let mobileFiring = false;
         joyBase.addEventListener('touchcancel', endJoy);
     }
 
-    // Touch-drag anywhere on the game canvas to rotate camera
+    // Touch-drag anywhere on the game canvas to rotate camera (preventDefault stops browser scroll/refresh)
+    const applyLookDelta = (dx, dy) => {
+        const sens = player.xrayScope ? 0.0022 : 0.0062;
+        if (player.vehicle) {
+            player.camOff = (player.camOff || 0) - dx * sens;
+            player.camOffT = 2.0;
+        } else {
+            player.yaw -= dx * sens;
+            player.pitch = Math.max(-0.55, Math.min(0.85, player.pitch + dy * sens * 0.8));
+        }
+    };
     mountEl.addEventListener('touchstart', e => {
         if (!isMobile) return;
+        e.preventDefault();
+        sfx.startAmbient();
         for (const t of e.changedTouches) {
             if (lookId === null && t.identifier !== joyId) {
                 lookId = t.identifier; lookX = t.clientX; lookY = t.clientY;
-                sfx.init();
             }
         }
-    }, { passive: true });
+    }, { passive: false });
     mountEl.addEventListener('touchmove', e => {
         if (!isMobile || lookId === null) return;
+        e.preventDefault();
         for (const t of e.changedTouches) {
             if (t.identifier === lookId) {
-                const dx = t.clientX - lookX, dy = t.clientY - lookY;
+                applyLookDelta(t.clientX - lookX, t.clientY - lookY);
                 lookX = t.clientX; lookY = t.clientY;
-                if (player.vehicle) {
-                    player.camOff = (player.camOff || 0) - dx * 0.0065;
-                    player.camOffT = 2.0;
-                } else {
-                    player.yaw -= dx * 0.0065;
-                    player.pitch = Math.max(-0.55, Math.min(0.85, player.pitch + dy * 0.005));
-                }
             }
         }
-    }, { passive: true });
+    }, { passive: false });
     const endLook = e => { for (const t of e.changedTouches) if (t.identifier === lookId) lookId = null; };
     mountEl.addEventListener('touchend', endLook);
     mountEl.addEventListener('touchcancel', endLook);
@@ -3474,14 +3484,28 @@ let mobileFiring = false;
         ww.style.display = ww.style.display === 'flex' ? 'none' : 'flex';
     }, { passive: false });
     if (mFire) {
+        let fireId = null, fX = 0, fY = 0;
         mFire.addEventListener('touchstart', e => {
             e.preventDefault(); e.stopPropagation();
-            sfx.init();
+            sfx.startAmbient();
+            const t = e.changedTouches[0];
+            if (t) { fireId = t.identifier; fX = t.clientX; fY = t.clientY; }
             mobileFiring = true;
             mFire.classList.add('pressed');
             fireWeapon(W / 2, H / 2);
         }, { passive: false });
-        const stopFire = () => { mobileFiring = false; mFire.classList.remove('pressed'); };
+        mFire.addEventListener('touchmove', e => {
+            e.preventDefault(); e.stopPropagation();
+            for (const t of e.changedTouches) {
+                if (t.identifier === fireId) {
+                    applyLookDelta(t.clientX - fX, t.clientY - fY);
+                    fX = t.clientX; fY = t.clientY;
+                }
+            }
+        }, { passive: false });
+        const stopFire = e => {
+            for (const t of e.changedTouches) if (t.identifier === fireId) { fireId = null; mobileFiring = false; mFire.classList.remove('pressed'); }
+        };
         mFire.addEventListener('touchend', stopFire);
         mFire.addEventListener('touchcancel', stopFire);
     }
@@ -3897,7 +3921,7 @@ function drawHud() {
         g.stroke();
         g.fillStyle = '#ef4444'; g.beginPath(); g.arc(cx, cy, 2.2, 0, Math.PI * 2); g.fill();
     } else if (player.mode !== 'build' && !player.vehicle) {
-        const mx = (mouseVec.x + 1) / 2 * W, my = (1 - mouseVec.y) / 2 * H;
+        const mx = isMobile ? cx : (mouseVec.x + 1) / 2 * W, my = isMobile ? cy : (1 - mouseVec.y) / 2 * H;
         g.strokeStyle = 'rgba(255,255,255,0.9)'; g.lineWidth = 2;
         g.beginPath();
         g.moveTo(mx - 10, my); g.lineTo(mx - 4, my); g.moveTo(mx + 4, my); g.lineTo(mx + 10, my);
@@ -3928,7 +3952,9 @@ window.addEventListener('keydown', e => {
 let lastT = performance.now(), walkCycle = 0;
 
 const fpsPill = document.createElement('div');
-fpsPill.style.cssText = 'position:fixed;left:8px;bottom:8px;max-width:90vw;z-index:2147483647;background:rgba(0,0,0,.8);color:#facc15;font:bold 14px monospace;padding:4px 10px;border-radius:6px;pointer-events:none';
+fpsPill.style.cssText = isMobile
+    ? 'position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:2147483647;background:rgba(0,0,0,.65);color:#facc15;font:bold 10px monospace;padding:2px 7px;border-radius:5px;pointer-events:none;white-space:nowrap'
+    : 'position:fixed;left:8px;bottom:8px;max-width:90vw;z-index:2147483647;background:rgba(0,0,0,.8);color:#facc15;font:bold 14px monospace;padding:4px 10px;border-radius:6px;pointer-events:none';
 fpsPill.textContent = 'FPS: ...'; document.body.appendChild(fpsPill);
 let fpsFrames = 0, fpsLast = 0;
 // any error inside one frame is shown on screen (yellow line) instead of silently freezing the game
@@ -3939,13 +3965,19 @@ function animate(now) {
         const where = ((e.stack || '').split('\n')[1] || '').replace(/.*index\.html/, 'index.html').trim();
         if (window.lastErr !== e.message) { window.lastErr = e.message; console.error(e); pushFeed('⚠️ ' + e.message); }
         window.debugK = 'ERR: ' + e.message + ' ' + where;
-        try { composer.render(); } catch (e2) {}
+        try { renderFrame(); } catch (e2) {}
     }
 }
 function animateInner(now) {
     if (!window.gameReady) { lastT = now; return; }
     const rawDt = Math.min(0.05, (now - lastT) / 1000);
-    fpsFrames++; if (now - fpsLast >= 500) { fpsPill.textContent = 'v54 | FPS: ' + Math.round(fpsFrames * 1000 / (now - fpsLast)) + ' | GLB: ' + Object.keys(PROPS).join(',') + ' | animals GLB: ' + creatures.filter(c => c.glbApplied).length + '/' + creatures.length + (window.debugK ? ' | ' + window.debugK : ''); fpsFrames = 0; fpsLast = now; }
+    fpsFrames++; if (now - fpsLast >= 500) {
+        const fpsVal = Math.round(fpsFrames * 1000 / (now - fpsLast));
+        fpsPill.textContent = isMobile
+            ? ('v55 | ' + fpsVal + ' FPS' + (window.debugK ? ' | ' + window.debugK : ''))
+            : ('v55 | FPS: ' + fpsVal + ' | GLB: ' + Object.keys(PROPS).join(',') + ' | animals GLB: ' + creatures.filter(c => c.glbApplied).length + '/' + creatures.length + (window.debugK ? ' | ' + window.debugK : ''));
+        fpsFrames = 0; fpsLast = now;
+    }
     lastT = now;
     const dt = bulletCam.active ? rawDt * 0.18 : rawDt;
     const elapsed = now / 1000;
@@ -3986,7 +4018,7 @@ function animateInner(now) {
             document.body.classList.remove('bullet-cam');
             if (bulletCam.onArrive) bulletCam.onArrive();
         }
-        composer.render();
+        renderFrame();
         return;
     }
 
@@ -4478,7 +4510,7 @@ function animateInner(now) {
     // 7. HUD + RADAR + RENDER
     drawRadar();
     drawHud();
-    composer.render();
+    renderFrame();
 }
 requestAnimationFrame(animate);
 </script>
