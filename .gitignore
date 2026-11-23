@@ -1,0 +1,9 @@
+node_modules/
+dist/
+DinoHunterUE/
+index.backup.html
+ai_studio_code*.html
+trex.glb
+.DS_Store
+*.log
+.vercel/

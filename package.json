@@ -1,0 +1,21 @@
+{
+  "name": "home-simulator-3d",
+  "version": "1.0.0",
+  "description": "Home Simulator 3D Game",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.homesimulator.game",
+    "productName": "HomeSimulator3D",
+    "win": {
+      "target": "portable"
+    }
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3"
+  }
+}
